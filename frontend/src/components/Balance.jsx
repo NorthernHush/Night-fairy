@@ -1,4 +1,6 @@
-// src/components/Balance.jsx
+/*
+  *  The component for tracking and obtaining the user’s balance is generally needed to verify payment, otherwise you don’t have to use it. 
+*/
 import React, { useState, useEffect } from 'react';
 import './style/Balance.css';
 

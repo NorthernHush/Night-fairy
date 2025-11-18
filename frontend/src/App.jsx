@@ -1,4 +1,8 @@
-// src/App.js
+/*
+*  The main component where all the front-end logic takes place and sends the REST API to the back-end for payment.
+*/
+
+
 import React, { useState, useEffect } from 'react';
 import CryptoPayment from './components/CryptoPayment';
 import Balance from './components/Balance';
@@ -43,8 +47,10 @@ function App() {
       let paymentInfo = null;
 
       if (method === 'crypto') {
-        // Вызываем новый эндпоинт на вашем сервере
-        const response = await fetch('http://localhost:3009/api/create-crypto-payment', { // или ваш ngrok URL
+        const response = await fetch('http://localhost:3009/api/create-crypto-payment', { // Also NGROK
+          /*
+              * http://ngrok-url/api/create-crypto-payment
+          */
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -71,8 +77,11 @@ function App() {
           payCurrency: data.pay_currency,
         };
       } else {
-        // Для других методов (Сбер, Т-Банк) - ваш существующий эндпоинт
-        const response = await fetch('http://localhost:3009/api/create-payment', { // или ваш ngrok URL
+        // Для других методов (Сбер, Т-Банк) -
+        const response = await fetch('http://localhost:3009/api/create-payment', {  //also ngrok
+          /*
+              * http://ngrok-url/api/create-payment
+          */
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

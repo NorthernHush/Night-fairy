@@ -1,4 +1,8 @@
-// backend/server.js
+/*
+  *  Server component for sending requests to payment systems.
+  *  It won’t work without it, the YUKASSA payment system is connected here.
+  *  And also crypto nowpayments
+*/
 const express = require('express');
 const cors = require('cors');
 const YooKassa = require('yookassa');
@@ -16,7 +20,7 @@ const yooKassa = new YooKassa({
 });
 
 // NOWPayments
-const NOWPAYMENTS_API_KEY = '2DC81AH-JMC4C5S-QFR9M42-X1C5JWV'; // Замените на ваш API-ключ
+const NOWPAYMENTS_API_KEY = '2DC81AH-JMC4C5S-QFR9M42-X1C5JWV'; 
 const NOWPAYMENTS_API_URL = 'https://api.nowpayments.io/v1';
 
 // Мок-база пользователей
