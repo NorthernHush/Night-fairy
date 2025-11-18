@@ -1,0 +1,434 @@
+/* frontend/src/App.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
+
+:root {
+  --primary-red: #ff0058;
+  --secondary-pink: #f7b7e2;
+  --accent-red: #ff6b6b;
+  --dark-bg: #000000;
+  --light-text: #ffffff;
+  --gold: #ffcc00;
+  --sber-blue: #0078d7;
+  --tbank-blue: #00a0e3;
+  --crypto-yellow: #f2a900;
+  --support-red: #ff4757;
+  --card-bg: rgba(30, 0, 30, 0.8);
+  --card-border: rgba(255, 0, 88, 0.3);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  background: linear-gradient(135deg, var(--dark-bg), var(--primary-red), var(--accent-red), var(--secondary-pink), var(--light-text));
+  font-family: 'Montserrat', sans-serif;
+  position: relative;
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+  padding: 20px;
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.payment-page {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  padding: 30px;
+  background: var(--card-bg);
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--card-border);
+  animation: fadeIn 1s ease-out;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.payment-page:hover {
+  transform: scale(1.01);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Анимированный фон */
+.background-animation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Анимированные полосы */
+.animation-strips {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.strip {
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--primary-red), transparent);
+  animation: slideStrip 3s linear infinite;
+}
+
+.strip.top { top: 0; animation-delay: 0s; }
+.strip.bottom { bottom: 0; animation-delay: 1.5s; }
+
+@keyframes slideStrip {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.header {
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.logo-container {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 15px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(255, 0, 88, 0.5);
+  border-radius: 15px;
+  background: rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 20px rgba(255, 0, 88, 0.4);
+  transition: all 0.5s ease;
+  animation: logoFloat 3s ease-in-out infinite;
+}
+
+@media (max-width: 480px) {
+  .logo-container {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+@keyframes logoFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+.logo-container.pulse {
+  animation: pulse 0.5s ease, logoFloat 3s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 0, 88, 0.4); }
+  50% { transform: scale(1.05); box-shadow: 0 0 30px rgba(255, 0, 88, 0.6); }
+  100% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 0, 88, 0.4); }
+}
+
+.fairy-logo {
+  width: 80px;
+  height: 80px;
+  filter: drop-shadow(0 0 5px rgba(255, 0, 88, 0.6));
+  transition: all 0.3s ease;
+}
+
+.fairy-logo:hover {
+  filter: drop-shadow(0 0 10px rgba(255, 0, 88, 0.8)) brightness(1.2);
+}
+
+.title {
+  font-size: 28px;
+  margin: 0;
+  font-weight: 700;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+  color: var(--light-text);
+  transition: all 0.5s ease;
+  position: relative;
+  display: inline-block;
+  line-height: 1.2;
+  letter-spacing: 1px;
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 22px;
+  }
+}
+
+.title::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--primary-red), transparent);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+
+.title:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.title.glow {
+  animation: glow 1s ease;
+  text-shadow: 0 0 20px var(--primary-red), 0 0 30px var(--primary-red);
+}
+
+@keyframes glow {
+  0% { text-shadow: 0 0 15px rgba(255, 255, 255, 0.7); }
+  50% { text-shadow: 0 0 25px var(--primary-red), 0 0 35px var(--primary-red); }
+  100% { text-shadow: 0 0 15px rgba(255, 255, 255, 0.7); }
+}
+
+.buttons-container {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin: 10px 0;
+}
+
+.btn {
+  padding: 18px 25px;
+  font-size: 18px;
+  border: none;
+  border-radius: 15px;
+  color: var(--light-text);
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  font-weight: bold;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  letter-spacing: 0.5px;
+  width: 100%;
+  max-width: 100%;
+  text-align: center;
+  background: linear-gradient(135deg, var(--sber-blue), var(--tbank-blue));
+  /* По умолчанию - градиент от синего к голубому */
+}
+
+.btn.sber {
+  background: linear-gradient(135deg, var(--sber-blue), #00c3ff);
+}
+
+.btn.tbank {
+  background: linear-gradient(135deg, var(--tbank-blue), #00e0ff);
+}
+
+.btn.crypto {
+  background: linear-gradient(135deg, var(--crypto-yellow), #ffcc00, var(--accent-red));
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: 0.5s;
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+.btn:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
+}
+
+.btn:active, .btn.active {
+  transform: scale(0.98);
+  box-shadow: 0 0 20px currentColor;
+}
+
+/* Новый блок "Проблема с оплатой" */
+.support-section {
+  position: relative;
+  margin-top: 10px;
+}
+
+.support-btn {
+  background: linear-gradient(135deg, var(--support-red), #ff6b6b);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 20px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.support-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(135deg, #ff6b6b, var(--support-red));
+}
+
+.support-popup {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 15px;
+  border-radius: 10px;
+  font-size: 13px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  width: 250px;
+  text-align: center;
+  margin-bottom: 10px;
+  animation: popupShow 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.support-popup strong {
+  color: var(--gold);
+  display: block;
+  margin: 5px 0;
+}
+
+@keyframes popupShow {
+  from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+.footer-note {
+  margin-top: 15px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.5;
+}
+
+@media (max-width: 480px) {
+  .footer-note {
+    font-size: 13px;
+  }
+}
+
+.footer-note strong {
+  color: var(--gold);
+  text-shadow: 0 0 8px rgba(255, 204, 0, 0.4);
+  font-weight: 700;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .payment-page {
+    width: 95%;
+    padding: 20px;
+    margin: 10px;
+  }
+
+  .buttons-container {
+    gap: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .payment-page {
+    width: 100%;
+    padding: 15px;
+    border-radius: 15px;
+  }
+
+  .buttons-container {
+    gap: 12px;
+  }
+
+  .support-btn {
+    font-size: 13px;
+    padding: 10px 15px;
+  }
+}
+
+/* Анимация при наведении на кнопки */
+@keyframes buttonRipple {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.3);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(255, 255, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+  }
+}
+
+.btn:active {
+  animation: buttonRipple 0.6s linear;
+}
+
+/* Дополнительная анимация текста */
+.title {
+  animation: textGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes textGlow {
+  0% { text-shadow: 0 0 5px rgba(255, 255, 255, 0.5); }
+  100% { text-shadow: 0 0 20px var(--primary-red), 0 0 30px var(--primary-red); }
+}
+
+/* Убираем артефакты прокрутки */
+@media (max-width: 480px) {
+  body {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Улучшенная производительность на слабых устройствах */
+@media (max-width: 480px) {
+  .payment-page {
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: none;
+  }
+}
