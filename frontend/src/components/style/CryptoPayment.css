@@ -1,0 +1,294 @@
+/* src/components/style/CryptoPayment.css */
+.crypto-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, rgba(100,0,150,0.6), rgba(0,0,0,0.9));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(2px);
+  animation: modalFadeIn 0.4s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; backdrop-filter: blur(0); }
+  to { opacity: 1; backdrop-filter: blur(2px); }
+}
+
+.crypto-modal-content {
+  background: linear-gradient(145deg, #1e1e2e, #12121e);
+  padding: 25px;
+  border-radius: 16px;
+  max-width: 90%;
+  width: 420px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5),
+              0 0 20px rgba(180,100,255,0.2),
+              inset 0 0 20px rgba(255,255,255,0.05);
+  text-align: center;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.1);
+  animation: modalSlideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes modalSlideIn {
+  from { transform: scale(0.9) translateY(20px); opacity: 0; }
+  to { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+.crypto-header {
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.crypto-header h3 {
+  margin: 0;
+  font-size: 22px;
+  color: #e0aaff;
+  text-shadow: 0 0 10px rgba(224,170,255,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.beta-tag {
+  display: inline-block;
+  background: rgba(255,200,120,0.2);
+  color: #ffd166;
+  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: 10px;
+  margin-top: 5px;
+  border: 1px solid rgba(255,200,120,0.3);
+}
+
+.crypto-info {
+  background: rgba(255,255,255,0.05);
+  padding: 15px;
+  border-radius: 12px;
+  margin: 15px 0;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.info-row span {
+  opacity: 0.8;
+}
+
+.amount, .network {
+  color: #00ffcc;
+  font-weight: bold;
+  text-shadow: 0 0 5px rgba(0,255,204,0.3);
+}
+
+.address-label {
+  text-align: left;
+  margin: 15px 0 8px;
+  opacity: 0.8;
+}
+
+.crypto-address-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 8px 0;
+  background: rgba(0,0,0,0.3);
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.1);
+  word-break: break-all;
+}
+
+.crypto-address {
+  flex-grow: 1;
+  margin-right: 10px;
+  font-family: monospace;
+  font-size: 14px;
+  color: #aaffaa;
+  text-shadow: 0 0 5px rgba(170,255,170,0.2);
+}
+
+.copy-btn {
+  background: linear-gradient(135deg, #00c853, #009624);
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0,200,83,0.2);
+}
+
+.copy-btn:hover {
+  background: linear-gradient(135deg, #00e664, #00b23a);
+  transform: scale(1.05);
+  box-shadow: 0 6px 15px rgba(0,200,83,0.3);
+}
+
+/* Статус платежа */
+.status-info {
+  margin: 15px 0;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255, 0.1);
+  font-size: 14px;
+}
+
+.status-info p {
+  margin: 5px 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.status-finished {
+  color: #4CAF50;
+  font-weight: bold;
+}
+
+.status-pending {
+  color: #FFC107;
+}
+
+.status-expired {
+  color: #F44336;
+}
+
+.crypto-footer {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.crypto-footer p {
+  font-size: 14px;
+  opacity: 0.8;
+  margin-bottom: 10px;
+}
+
+.confirmation-timer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #ffd166;
+  font-size: 13px;
+}
+
+.timer-dot {
+  width: 8px;
+  height: 8px;
+  background: #ffd166;
+  border-radius: 50%;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+/* Кнопки действий */
+.crypto-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+  justify-content: center;
+}
+
+.check-btn, .paid-btn {
+  flex: 1;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.check-btn {
+  background: linear-gradient(135deg, #42a5f5, #1e88e5);
+  color: white;
+  box-shadow: 0 4px 10px rgba(66,165,245,0.2);
+}
+
+.check-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #64b5f6, #42a5f5);
+  transform: scale(1.03);
+  box-shadow: 0 6px 15px rgba(66,165,245,0.3);
+}
+
+.check-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.paid-btn {
+  background: linear-gradient(135deg, #66bb6a, #388e3c);
+  color: white;
+  box-shadow: 0 4px 10px rgba(102,187,106,0.2);
+}
+
+.paid-btn:hover {
+  background: linear-gradient(135deg, #81c784, #66bb6a);
+  transform: scale(1.03);
+  box-shadow: 0 6px 15px rgba(102,187,106,0.3);
+}
+
+.close-btn {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #ff6b6b, #d32f2f);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 10px rgba(255,107,107,0.2);
+}
+
+.close-btn:hover {
+  background: linear-gradient(135deg, #ff8e8e, #e53935);
+  transform: scale(1.03);
+  box-shadow: 0 6px 15px rgba(255,107,107,0.3);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .crypto-modal-content {
+    width: 95%;
+    padding: 20px;
+  }
+
+  .crypto-header h3 {
+    font-size: 20px;
+  }
+
+  .info-row {
+    flex-direction: column;
+    gap: 5px;
+    align-items: flex-start;
+  }
+
+  .crypto-actions {
+    flex-direction: column;
+  }
+
+  .crypto-address {
+    font-size: 12px;
+  }
+}

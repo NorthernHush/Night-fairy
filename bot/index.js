@@ -1,31 +1,18 @@
-// ==============================
-// FULL CLEAN PAYMENT BOT
-// instant callbacks, no support
-// admin approve / reject
-// anti-spam
-// bot protection
-// ==============================
-
 const TelegramBot = require("node-telegram-bot-api");
 
-// ---- CONFIG ---- //
 const TOKEN = process.env.TELEGRAM_BOT_TOKEN || "8584308416:AAE9Bz0te9XDwZwDGjPOZuE1po1GHTN0xgY";
 const ADMINS = ["8145917560"]; // Add more admin IDs
 const PAY_URL = "https://transcondyloid-marcellus-subangularly.ngrok-free.dev/";
 
-// ---- BOT ---- //
 const bot = new TelegramBot(TOKEN, { polling: true });
 
-// ---- STATE ---- //
 const waitingForCheck = new Map();   // userId -> waiting boolean
 const pendingChecks = new Map();      // userId -> fileId
 const spamCooldown = new Map();       // userId -> lastMessageTime
 
-// ---- SETTINGS ---- //
 const SPAM_DELAY = 1500;
 const BLOCKED_TOKENS = ["http", "t.me", "joinchat", "://"]; // simple protection
 
-// ---- Inline keyboard ---- //
 const PAY_BUTTON = {
   reply_markup: {
     inline_keyboard: [
@@ -39,9 +26,7 @@ const PAY_BUTTON = {
   }
 };
 
-// ==============================
-// ANTI SPAM
-// ==============================
+
 function antiSpam(chatId) {
   const now = Date.now();
   const last = spamCooldown.get(chatId) || 0;
@@ -50,18 +35,13 @@ function antiSpam(chatId) {
   return false;
 }
 
-// ==============================
-// BOT PROTECTION
-// ==============================
+
 function isSuspicious(text) {
   if (!text) return false;
   const low = text.toLowerCase();
   return BLOCKED_TOKENS.some(w => low.includes(w));
 }
 
-// ==============================
-// /start
-// ==============================
 bot.onText(/\/start/, (msg) => {
   bot.sendMessage(
     msg.chat.id,
@@ -70,9 +50,7 @@ bot.onText(/\/start/, (msg) => {
   );
 });
 
-// ==============================
-// CALLBACKS (ADMIN ONLY)
-// ==============================
+
 bot.on("callback_query", async (q) => {
   try {
     await bot.answerCallbackQuery(q.id); // prevents spinner freeze
@@ -101,22 +79,18 @@ bot.on("callback_query", async (q) => {
   }
 });
 
-// ==============================
-// MESSAGE HANDLER
-// ==============================
 bot.on("message", async (msg) => {
   const chatId = msg.chat.id;
   const text = msg.text?.toLowerCase() || "";
 
-  // Anti spam
+
   if (antiSpam(chatId)) return;
 
-  // Bot protection
+
   if (isSuspicious(text)) {
     return bot.sendMessage(chatId, "⚠ Подозрительная ссылка заблокирована.");
   }
 
-  // ========== WAITING FOR CHECK ========== //
   if (waitingForCheck.has(chatId)) {
     const file = msg.photo?.[msg.photo.length - 1]?.file_id || (msg.document ? msg.document.file_id : null);
 
@@ -149,13 +123,11 @@ bot.on("message", async (msg) => {
     return bot.sendMessage(chatId, "⏳ Чек отправлен на проверку.");
   }
 
-  // ========== USER WROTE: ОПЛАТИЛ ========== //
   if (text.includes("оплатил") || text.includes("оплачено")) {
     waitingForCheck.set(chatId, true);
     return bot.sendMessage(chatId, "📸 Пришли *чек об оплате* (фото или файл):", { parse_mode: "Markdown" });
   }
 
-  // ========== DEFAULT SILENT MODE ========== //
 });
 
 console.log("🤖 CLEAN PAYMENT BOT RUNNING...");

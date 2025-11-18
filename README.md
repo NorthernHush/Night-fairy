@@ -7,3 +7,7 @@
 # React JS for frontend and nodejs for telegram bot
 
 # In telegram bot we have inline-keyboard for 
+
+# In Telegram bot we have only Open Payment
+
+https://nowpayments.io/payment/?iid=5682461293

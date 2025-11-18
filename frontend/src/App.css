@@ -11,7 +11,7 @@ body, html {
   color: #fff;
 }
 
-/* Глубокие неоновые туманности */
+/* Пульсирующий фон — как дыхание тумана */
 body::before {
   content: "";
   position: fixed;
@@ -21,6 +21,13 @@ body::before {
   filter: blur(100px);
   opacity: 0.85;
   z-index: -3;
+  animation: breathe 12s ease-in-out infinite alternate;
+}
+
+@keyframes breathe {
+  0% { opacity: 0.7; }
+  50% { opacity: 0.95; }
+  100% { opacity: 0.7; }
 }
 
 /* Плавающие частицы */
@@ -40,15 +47,39 @@ body::after {
   100% { transform: translateY(-650px); }
 }
 
-
 /* Основной контейнер */
 .payment-page {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 35px;
+  min-height: 100vh;
+  padding: 35px 20px;
+  box-sizing: border-box;
+  position: relative;
 }
 
+/* Звёздное поле */
+.starfield {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -2;
+}
+
+.star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 0 6px rgba(255,255,255,0.8);
+  animation: twinkle 3s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.1; }
+  50% { opacity: 1; }
+}
 
 /* ЛОГО — мягкое парение, премиум-свечение */
 .logo-container {
@@ -73,14 +104,44 @@ body::after {
   height: 150px;
 }
 
-
-/* ТЕКСТ — элитный неоновый заголовок */
+/* ТЕКСТ — анимированное появление */
 .title {
   font-size: 36px;
   font-weight: 800;
   margin-top: 5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   text-shadow: 0 0 14px rgba(255,0,170,1), 0 0 30px rgba(255,0,200,0.9);
   animation: titlePulse 4s ease-in-out infinite;
+}
+
+.title-text,
+.title-fairy {
+  opacity: 0;
+  animation: fadeInText 1.2s ease-out forwards;
+}
+
+.title-text {
+  animation-delay: 0.2s;
+}
+
+.title-fairy {
+  animation-delay: 0.6s;
+}
+
+.title-emoji {
+  opacity: 0;
+  animation: fadeInEmoji 0.8s ease-out 1.2s forwards;
+}
+
+@keyframes fadeInText {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInEmoji {
+  from { opacity: 0; transform: scale(0.8) translateY(10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
 }
 
 @keyframes titlePulse {
@@ -89,8 +150,7 @@ body::after {
   100% { opacity: 0.9; filter: blur(0px); }
 }
 
-
-/* КНОПКИ ОПЛАТЫ — уменьшена яркость, добавлен мягкий glow */
+/* КНОПКИ ОПЛАТЫ */
 .buttons-container {
   width: 100%;
   max-width: 420px;
@@ -107,29 +167,38 @@ body::after {
   border-radius: 16px;
   border: none;
   cursor: pointer;
-  color: #fff;
-  transition: 0.25s ease;
+  color: #000; /* ✅ Чёрный текст */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
   backdrop-filter: blur(4px);
-  transform: translateZ(0); /* Для плавности */
+  transform: translateZ(0);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* неоновая волна */
-.btn::after {
+/* Внутренний светящийся контур при наведении */
+.btn::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(255,255,255,0.2);
+  border: 2px solid transparent;
+  border-radius: 16px;
   opacity: 0;
-  transition: 0.35s ease;
+  transition: 0.3s ease;
+  z-index: -1;
+  pointer-events: none;
 }
 
-.btn:hover::after {
-  opacity: 0.1;
+.btn:hover::before {
+  opacity: 1;
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.3);
 }
 
-/* hover эффект — лёгкое поднятие */
+.btn.sber:hover::before { border-color: rgba(100, 255, 150, 0.4); }
+.btn.tbank:hover::before { border-color: rgba(180, 100, 255, 0.4); }
+.btn.crypto:hover::before { border-color: rgba(255, 220, 0, 0.4); }
+
 .btn:hover:not(:disabled) {
   transform: scale(1.045);
   filter: brightness(1.18);
@@ -144,25 +213,20 @@ body::after {
   cursor: not-allowed;
 }
 
-
-/* ✔ Чуть приглушённые премиум-градиенты */
+/* Градиенты */
 .btn.sber {
-  background: linear-gradient(135deg, #0daa40, #00d86f);
-  box-shadow: 0 0 15px rgba(0,255,120,0.28);
+  background: linear-gradient(135deg, #a8e6a3, #66bb6a);
 }
 
 .btn.tbank {
-  background: linear-gradient(135deg, #7600d8, #c04bff);
-  box-shadow: 0 0 15px rgba(150,0,255,0.28);
+  background: linear-gradient(135deg, #b39ddb, #7e57c2);
 }
 
 .btn.crypto {
-  background: linear-gradient(135deg, #e3a600, #ffda55);
-  box-shadow: 0 0 15px rgba(255,220,0,0.28);
+  background: linear-gradient(135deg, #ffd54f, #ffb300);
 }
 
-
-/* Кнопка "Проблема с оплатой" — БЕЛАЯ */
+/* Кнопка "Проблема с оплатой" */
 .support-section {
   margin-top: 32px;
   text-align: center;
@@ -172,20 +236,20 @@ body::after {
   padding: 13px 20px;
   font-size: 17px;
   font-weight: 700;
-  background: #ffffff;
+  background: #f5f5f5;
   color: #000;
   border-radius: 14px;
   cursor: pointer;
   transition: 0.25s;
-  box-shadow: 0 0 10px rgba(255,255,255,0.4);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  border: none;
 }
 
 .support-btn:hover {
   transform: scale(1.06);
-  background: #f2f2f2;
-  box-shadow: 0 0 14px rgba(255,255,255,0.6);
+  background: #e0e0e0;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.25);
 }
-
 
 /* Popup */
 .support-popup {
@@ -194,15 +258,16 @@ body::after {
   padding: 14px;
   border-radius: 12px;
   border: 1px solid rgba(255,255,255,0.25);
-  animation: fadeIn 0.3s ease;
+  animation: fadeOut 0.6s ease-out forwards;
   backdrop-filter: blur(6px);
+  color: white;
+  font-size: 16px;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
+@keyframes fadeOut {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-10px); }
 }
-
 
 /* Footer */
 .footer-note {
@@ -211,4 +276,138 @@ body::after {
   font-size: 15px;
   text-align: center;
   padding-bottom: 35px;
+  color: #ccc;
+}
+
+/* Стили для модального окна криптоплатежа */
+.crypto-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.crypto-modal-content {
+  background: #1a1a1a;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 90%;
+  width: 400px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  color: white;
+  position: relative;
+}
+
+.crypto-modal-content h3 {
+  margin-top: 0;
+  color: #FF406B;
+}
+
+.crypto-address-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px 0;
+  background: #2a2a2a;
+  padding: 10px;
+  border-radius: 4px;
+  word-break: break-all;
+}
+
+.crypto-address {
+  flex-grow: 1;
+  margin-right: 10px;
+  font-family: monospace;
+  font-size: 0.9em;
+}
+
+.copy-btn {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 1em;
+}
+
+.copy-btn:hover {
+  background: #45a049;
+}
+
+.crypto-modal-content button {
+  margin-top: 15px;
+  padding: 8px 16px;
+  background: #FF406B;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.crypto-modal-content button:hover {
+  background: #e03a5f;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .title {
+    font-size: 28px;
+  }
+
+  .logo-container {
+    width: 120px;
+    height: 120px;
+  }
+
+  .fairy-logo {
+    width: 120px;
+    height: 120px;
+  }
+
+  .btn {
+    padding: 16px;
+    font-size: 17px;
+  }
+
+  .buttons-container {
+    width: 100%;
+    max-width: 340px;
+  }
+
+  .crypto-modal-content {
+    width: 90%;
+    padding: 15px;
+  }
+
+  .footer-note {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .payment-page {
+    padding: 20px 15px;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .btn {
+    padding: 14px;
+    font-size: 16px;
+  }
+
+  .support-btn {
+    font-size: 15px;
+    padding: 11px 16px;
+  }
 }

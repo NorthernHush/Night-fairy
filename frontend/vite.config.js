@@ -14,7 +14,7 @@ export default defineConfig({
     ],
     proxy: {
       '/api': {
-        target: 'http://localhost:3004',
+        target: 'https://transcondyloid-marcellus-subangularly.ngrok-free.dev',
         changeOrigin: true,
         secure: false
       }

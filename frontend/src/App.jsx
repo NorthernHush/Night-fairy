@@ -1,4 +1,7 @@
+// src/App.js
 import React, { useState, useEffect } from 'react';
+import CryptoPayment from './components/CryptoPayment';
+import Balance from './components/Balance';
 import './App.css';
 
 function App() {
@@ -7,7 +10,11 @@ function App() {
   const [activeBtn, setActiveBtn] = useState(null);
   const [showSupport, setShowSupport] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [paymentData, setPaymentData] = useState(null);
   const [loading, setLoading] = useState({ sber: false, tbank: false, crypto: false });
+
+  // Получаем userId из Telegram WebApp
+  const userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id || 123456;
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth <= 768);
@@ -32,25 +39,74 @@ function App() {
   const createPayment = async (method, amount = 1000, description) => {
     setLoading(prev => ({ ...prev, [method]: true }));
     try {
-      const response = await fetch('http://localhost:3004/api/create-payment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount, description: `${description} (${method})`, method })
-      });
+      let paymentUrl;
+      let paymentInfo = null;
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || `Ошибка: ${response.status}`);
+      if (method === 'crypto') {
+        // Вызываем новый эндпоинт на вашем сервере
+        const response = await fetch('http://localhost:3009/api/create-crypto-payment', { // или ваш ngrok URL
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            amount,
+            description,
+            user_id: userId
+          })
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({ error: `HTTP ${response.status}` }));
+          throw new Error(errorData.error || `Ошибка: ${response.status}`);
+        }
+
+        const data = await response.json();
+        paymentUrl = data.invoice_url;
+        paymentInfo = {
+          paymentUrl: data.invoice_url,
+          orderId: data.order_id,
+          amount: data.price_amount,
+          currency: data.price_currency,
+          payAddress: data.pay_address,
+          payAmount: data.pay_amount,
+          payCurrency: data.pay_currency,
+        };
+      } else {
+        // Для других методов (Сбер, Т-Банк) - ваш существующий эндпоинт
+        const response = await fetch('http://localhost:3009/api/create-payment', { // или ваш ngrok URL
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            amount,
+            description: `${description} (${method})`,
+            method,
+            currency: method === 'crypto' ? 'USDT' : undefined,
+            user_id: userId
+          })
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({ error: `HTTP ${response.status}` }));
+          throw new Error(errorData.error || `Ошибка: ${response.status}`);
+        }
+
+        const data = await response.json();
+        paymentUrl = data.confirmation_url;
+        paymentInfo = data;
       }
 
-      const data = await response.json();
-
-      if (data.confirmation_url) {
-        window.open(data.confirmation_url, '_blank');
+      if (method === 'crypto' && paymentUrl) {
+        window.open(paymentUrl, '_blank');
+        setPaymentData({
+          ...paymentInfo,
+          method: 'nowpayments'
+        });
+      } else if (paymentUrl) {
+        window.open(paymentUrl, '_blank');
       } else {
         throw new Error('Ссылка на оплату не получена');
       }
     } catch (err) {
+      console.error('Ошибка при создании оплаты:', err);
       alert('Ошибка при создании оплаты: ' + err.message);
     } finally {
       setLoading(prev => ({ ...prev, [method]: false }));
@@ -59,17 +115,35 @@ function App() {
 
   const handleSber = () => createPayment('sber', 1000, 'Оплата Сбербанк');
   const handleTBank = () => createPayment('tbank', 1000, 'Оплата Т-Банк');
-  const handleCrypto = () => createPayment('crypto', 1000, 'Оплата Крипта');
+  const handleCrypto = () => createPayment('crypto', 1000, 'Оплата Крипта через NowPayments');
 
   const handleSupportClick = () => {
     setShowSupport(true);
-    setTimeout(() => setShowSupport(false), 3000);
+    setTimeout(() => {
+      setShowSupport(false);
+    }, 3000);
+  };
+
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text).then(() => {
+      alert('Адрес скопирован в буфер обмена!');
+    }).catch(err => {
+      console.error('Ошибка копирования: ', err);
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      alert('Адрес скопирован в буфер обмена!');
+    });
   };
 
   return (
     <div className="payment-page">
       <div className="background-animation"></div>
-
+      <Balance userId={userId} />
+      
       <div className="header">
         <div className={`logo-container ${pulse ? 'pulse' : ''}`}>
           <img
@@ -115,6 +189,14 @@ function App() {
           {loading.crypto ? '⏳ Обработка...' : '₿ Крипта'}
         </button>
       </div>
+
+      <CryptoPayment
+        isOpen={!!paymentData}
+        onClose={() => setPaymentData(null)}
+        paymentData={paymentData}
+        onCopy={copyToClipboard}
+        method={paymentData?.method}
+      />
 
       <div className="support-section">
         <button className="support-btn" onClick={handleSupportClick}>
