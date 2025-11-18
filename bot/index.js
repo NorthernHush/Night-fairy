@@ -7,8 +7,8 @@ const bot = new TelegramBot(token, { polling: true });
 // Состояния пользователей: { chatId: { status: 'ожидает_чек', orderId: '...' } }
 const userStates = {};
 
-// ТВОЙ РЕАЛЬНЫЙ ID (заменить!)
-const ADMIN_CHAT_ID = '8145917560'; // ← ВЗЯЛ ИЗ ОШИБКИ (твой ID)
+
+const ADMIN_CHAT_ID = '8145917560';
 
 bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
