@@ -112,7 +112,7 @@ app.post('/api/webhook', express.raw({ type: 'application/json' }), async (req, 
   const event = req.body;
   const type = event.event;
   const payment = event.object;
-
+  //  To save, we check and display the payment to the console.
   if (type === 'payment.succeeded') {
     const paymentId = payment.id;
     const userId = payment.metadata?.user_id;
