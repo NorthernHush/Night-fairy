@@ -149,7 +149,7 @@ app.get('/', (req, res) => {
   res.json({ status: 'Server is running' });
 });
 
-const PORT = 3009;
+const PORT = 3009;    // The port at which the server starts, the main thing is to synchronize with the frontend.
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
-}); // 
+}); 
