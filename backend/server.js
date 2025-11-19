@@ -15,13 +15,13 @@ app.use(express.json());
 
 // ЮKassa
 const yooKassa = new YooKassa({
-  shopId: '1209622',
-  secretKey: 'test_UDNZWKJC7HLHaN-6ykY7DZxhDQYgjT8P2r4hYiIf22I'
+  shopId: '',                   // SHOP Store ID for YouKassa, get in your personal account.
+  secretKey: ''                //  You can receive the API key for YouKassa in your personal account.
 });
 
 // NOWPayments
-const NOWPAYMENTS_API_KEY = '2DC81AH-JMC4C5S-QFR9M42-X1C5JWV'; 
-const NOWPAYMENTS_API_URL = 'https://api.nowpayments.io/v1';
+const NOWPAYMENTS_API_KEY = '';   // API Key for NowPayment, get in your personal account
+const NOWPAYMENTS_API_URL = '';  // API URL for NowPayment, get it in your personal account
 
 // Мок-база пользователей
 const userBalances = new Map();
@@ -41,7 +41,7 @@ app.post('/api/create-payment', async (req, res) => {
 
     const payment = await yooKassa.createPayment({
       amount: { value: amount.toString(), currency: 'RUB' },
-      confirmation: { type: 'redirect', return_url: 'https://your-return-url.com' },
+      confirmation: { type: 'redirect', return_url: 'https://t.me/@nochnayafeya_bot' },
       description: description || 'Платеж через Ночная Фея',
       capture: true,
       metadata: { user_id: user_id.toString() }
